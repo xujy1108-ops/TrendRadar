@@ -1,0 +1,79 @@
+# AI 评分配置文件
+# OpenRouter API 配置
+
+# API Key（必填）
+# 获取方式：https://openrouter.ai/keys
+# 建议使用环境变量：export OPENROUTER_API_KEY='your-key'
+api_key: "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"  # 留空则从环境变量 OPENROUTER_API_KEY 读取
+
+# API 基础地址
+base_url: "https://openrouter.ai/api/v1"
+
+# 模型选择（推荐排序）
+# 1. openai/gpt-4o-mini - 快速、便宜、准确度高（推荐）⭐⭐⭐⭐⭐
+# 2. anthropic/claude-3.5-sonnet - 最准确但稍贵 ⭐⭐⭐⭐
+# 3. meta-llama/llama-3.1-8b-instruct:free - 免费（有限额） ⭐⭐⭐
+# 4. google/gemini-flash-1.5 - 快速且便宜 ⭐⭐⭐⭐
+model: "openai/gpt-4o-mini"
+
+# 请求超时时间（秒）
+timeout: 30
+
+# 批量评分延迟（秒）
+# 避免请求过快触发限流
+batch_delay: 0.5
+
+# 评分模式
+# - keyword: 仅关键词评分（快速，免费）
+# - ai: 仅AI评分（准确，有成本）
+# - hybrid: 混合模式（推荐）⭐
+scoring_mode: "hybrid"
+
+# 混合模式权重配置
+hybrid_weights:
+  keyword_weight: 0.3  # 关键词评分权重 30%
+  ai_weight: 0.7       # AI评分权重 70%
+
+# 关键词粗筛阈值
+# 只有超过此分数的新闻才会进行AI评分
+keyword_threshold: 12
+
+# 最终评分阈值
+# 只保留超过此分数的新闻
+final_threshold: 18
+
+# 是否显示详细日志
+verbose: false
+
+# 缓存配置（可选）
+# 相同新闻标题不重复评分
+enable_cache: true
+cache_file: "cache/ai_scores.json"
+
+# ========================================
+# 成本估算参考（OpenRouter，2025年12月）
+# ========================================
+# 
+# gpt-4o-mini:
+#   - 输入: $0.15 / 1M tokens
+#   - 输出: $0.60 / 1M tokens
+#   - 每条新闻约: 450 tokens
+#   - 每条成本约: $0.0003（¥0.002）
+#   - 每天20条: $0.006（¥0.04）
+#   - 月成本约: ¥1.2
+#
+# claude-3.5-sonnet:
+#   - 输入: $3 / 1M tokens
+#   - 输出: $15 / 1M tokens
+#   - 每条新闻约: 450 tokens
+#   - 每条成本约: $0.007（¥0.05）
+#   - 每天20条: $0.14（¥1）
+#   - 月成本约: ¥30
+#
+# llama-3.1-8b-instruct:free:
+#   - 完全免费
+#   - 但有请求限额
+#   - 准确度略低
+#
+# ========================================
+
